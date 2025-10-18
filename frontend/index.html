@@ -120,7 +120,7 @@ async function solveAnagram(word) {
     let res, data, list = [];
 
     if (input.includes("?")) {
-      res = await fetch('https://crossword-companion.onrender.com/anagram_pattern?pattern=${encodeURIComponent(input)}`);
+      res = await fetch(`https://crossword-companion.onrender.com/anagram_pattern?pattern=${encodeURIComponent(input)}`);
       data = await res.json();
       list = data.matches || [];
     } else {
