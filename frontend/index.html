@@ -120,11 +120,11 @@ async function solveAnagram(word) {
     let res, data, list = [];
 
     if (input.includes("?")) {
-      res = await fetch(`http://127.0.0.1:8000/anagram_pattern?pattern=${encodeURIComponent(input)}`);
+      res = await fetch('https://crossword-companion.onrender.com/anagram_pattern?pattern=${encodeURIComponent(input)}`);
       data = await res.json();
       list = data.matches || [];
     } else {
-      res = await fetch(`http://127.0.0.1:8000/anagram?letters=${encodeURIComponent(input)}`);
+      res = await fetch(`https://crossword-companion.onrender.com/anagram?letters=${encodeURIComponent(input)}`);
       data = await res.json();
       list = data.anagrams || [];
     }
@@ -149,7 +149,7 @@ async function searchDictionary(word) {
   infoEl.innerHTML = "";
 
   try {
-    const res = await fetch(`http://127.0.0.1:8000/dictionary?word=${encodeURIComponent(input)}`);
+    const res = await fetch(`https://crossword-companion.onrender.com/dictionary?word=${encodeURIComponent(input)}`);
     const data = await res.json();
 
     if (data.error) {
@@ -232,7 +232,7 @@ async function solveIndicator(word) {
   resultsEl.innerHTML = "<li>Searching...</li>";
 
   try {
-    const res = await fetch(`http://127.0.0.1:8000/indicator?word=${encodeURIComponent(input)}`);
+    const res = await fetch(`https://crossword-companion.onrender.com/indicator?word=${encodeURIComponent(input)}`);
     const data = await res.json();
     const list = data.results || [];
 
