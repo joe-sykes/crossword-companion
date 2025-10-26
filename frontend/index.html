@@ -305,9 +305,11 @@ async function solveIndicator(word) {
     const data = await res.json();
     const list = data.results || [];
 
-    resultsEl.innerHTML = list.length ? list.map(w => `<li>${w}</li>`).join("") : "<li>No results</li>";
-    makeWordsClickable("indicator-results");
-    addRecentSearch(input);
+    resultsEl.innerHTML = list.length
+  ? list.map(w => `<li><span class="indicator-word">${w}</span></li>`).join("")
+  : "<li>No results</li>";
+  addRecentSearch(input);
+
   } catch (err) {
     console.error(err);
     resultsEl.innerHTML = "<li>Error fetching indicator data</li>";
@@ -470,6 +472,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+// === PWA: Service Worker ===
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/service-worker.js")
+      .then((reg) => console.log("Service worker registered:", reg.scope))
+      .catch((err) => console.error("Service worker registration failed:", err));
+  });
+}
 
 
 
