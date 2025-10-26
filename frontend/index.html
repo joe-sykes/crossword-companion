@@ -16,6 +16,17 @@
 
 
 </head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NT69LLZR5T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NT69LLZR5T');
+</script>
+
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
 <header class="bg-white dark:bg-gray-700 shadow-md p-4">
@@ -50,7 +61,7 @@
     <input id="dict-input" class="border rounded px-3 py-2 w-full mb-4" placeholder="Search word">
     <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 mb-4 block mx-auto" onclick="searchDictionary()">Search</button>
     <ul id="dict-results" class="mt-2 list-disc pl-5 max-h-64 overflow-y-auto"></ul>
-    <div id="dict-info" class="mt-4 text-gray-800"></div>
+    <div id="dict-info" class="mt-4"></div>
   </div>
 
   <!-- Anagram Solver -->
@@ -120,7 +131,7 @@ async function solveAnagram(word) {
     let res, data, list = [];
 
     if (input.includes("?")) {
-      res = await fetch('https://crossword-companion.onrender.com/anagram_pattern?pattern=${encodeURIComponent(input)}`);
+      res = await fetch(`https://crossword-companion.onrender.com/anagram_pattern?pattern=${encodeURIComponent(input)}`);
       data = await res.json();
       list = data.matches || [];
     } else {
@@ -168,12 +179,12 @@ async function searchDictionary(word) {
     addRecentSearch(input);
 
     // Iterate over all homonyms
-    let html = '';
+      let html = '';
     data.forEach(hom => {
       const wordText = hom.hwi.hw || input;
       const pronunciation = hom.hwi.prs?.[0]?.mw || "";
       const fl = hom.fl || "";
-      
+
       let sensesHtml = '';
       hom.def?.forEach(d => {
         d.sseq.forEach(seqGroup => {
@@ -185,7 +196,7 @@ async function searchDictionary(word) {
                 sensesHtml += `<li>${mwTextToHTML(dtItem[1])}</li>`;
               } else if (dtItem[0] === 'vis') {
                 dtItem[1].forEach(vis => {
-                  sensesHtml += `<li style="color:gray; font-style:italic;">Example: ${mwTextToHTML(vis.t)}</li>`;
+                  sensesHtml += `<li class="dict-example">Example: ${mwTextToHTML(vis.t)}</li>`;
                 });
               }
             });
@@ -193,11 +204,14 @@ async function searchDictionary(word) {
         });
       });
 
-      html += `<div style="margin-bottom:16px;">
-                 <h3>${wordText} ${pronunciation ? `(${pronunciation})` : ""}</h3>
-                 <strong>${fl}</strong>
-                 <ul style="margin-left:20px;">${sensesHtml}</ul>
-               </div>`;
+      html += `
+        <div class="dict-entry">
+          <h3>${wordText} ${pronunciation ? `<span style="font-size:0.9rem;">(${pronunciation})</span>` : ""}</h3>
+          <strong>${fl}</strong>
+          <ul style="margin-left:1rem; margin-top:0.5rem;">${sensesHtml}</ul>
+        </div>
+        <hr style="border-color:#e5e7eb; margin:1rem 0;">
+      `;
     });
 
     infoEl.innerHTML = html;
@@ -205,23 +219,63 @@ async function searchDictionary(word) {
 
   } catch (err) {
     console.error(err);
-    resultsEl.innerHTML = "<li>Error fetching dictionary data</li>";
+    resultsEl.innerHTML = "<li>Word not found</li>";
   }
 }
+// === Clean and format Merriam-Webster dictionary markup ===
 function mwTextToHTML(text) {
   if (!text) return "";
 
-  return text
-    .replace(/\{bc\}/g, "<br>")                        // break
-    .replace(/\{it\}(.*?)\{\/it\}/g, "<em>$1</em>")    // italic
-    .replace(/\{wi\}(.*?)\{\/wi\}/g, "<em>$1</em>")    // word italics
-    .replace(/\{sx\|(.*?)\|.*?\}/g, "<strong>$1</strong>") // cross-ref / synonym
-    .replace(/\{dxt\|(.*?)\|\|.*?\}/g, "<em>$1</em>")      // dx_def links
-    .replace(/\{ldquo\}/g, "“")                        // left quote
-    .replace(/\{rdquo\}/g, "”")                        // right quote
-    .replace(/\{\/dx_def\}/g, "")                      // remove end tag
-    .replace(/\{sc\}(.*?)\{\/sc\}/g, "<strong>$1</strong>"); // small caps to bold
+  // Replace {bc} (M-W definition colon marker) with a bullet separator
+  text = text.replace(/{bc}/g, " • ");
+
+  // Italics, words in italics
+  text = text.replace(/{it}([^}]*){\/it}/g, "<em>$1</em>");
+  text = text.replace(/{wi}([^}]*){\/wi}/g, "<em>$1</em>");
+
+  // Small caps
+  text = text.replace(/{sc}([^}]*){\/sc}/g, "<strong>$1</strong>");
+
+  // Dictionary links {d_link|word|display}
+  text = text.replace(/{d_link\|([^|]*)\|([^}]*)}/g, (m, word, display) =>
+    `<a href="#" class="dict-link" data-word="${word}">${display}</a>`
+  );
+
+  // Anchor links {a_link|word}
+  text = text.replace(/{a_link\|([^}]*)}/g, (m, word) =>
+    `<a href="#" class="dict-link" data-word="${word}">${word}</a>`
+  );
+
+  // Synonyms / see also {sx|word|...}
+  text = text.replace(/{sx\|([^|]*)\|[^}]*}/g, (m, word) =>
+    `<a href="#" class="dict-link" data-word="${word}">${word}</a>`
+  );
+
+  // Clean up other internal tags
+  text = text
+    .replace(/{dx}|{\/dx}|{dx_def}[^}]*{\/dx_def}/g, "")
+    .replace(/{\/?a_link[^}]*}/g, "")
+    .replace(/{\/?d_link[^}]*}/g, "")
+    .replace(/{\/?sx[^}]*}/g, "");
+
+  // Remove double spaces or leftover spaces before punctuation
+  text = text.replace(/\s+/g, " ").trim();
+
+  return text;
 }
+
+
+// === Event delegation for in-definition links ===
+document.addEventListener("click", function (e) {
+  if (e.target.classList.contains("dict-link")) {
+    e.preventDefault();
+    const word = e.target.getAttribute("data-word");
+    if (word) {
+      searchDictionary(word); // Perform another lookup
+    }
+  }
+});
+
 
 
 // === Indicator Finder ===
@@ -332,6 +386,76 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
   });
 });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Map input IDs -> handler function name or button id to click
+  const bindings = {
+    "dict-input": { fn: "searchDictionary", buttonId: null },
+    "anagram-input": { fn: "solveAnagram", buttonId: null },
+    "pattern-input": { fn: "solvePattern", buttonId: null },
+    "indicator-input": { fn: "solveIndicator", buttonId: null },
+    // add more if you have them: "abbrev-input": { fn: "solveAbbrev", buttonId: "abbrev-btn" }
+  };
+
+  Object.entries(bindings).forEach(([inputId, { fn, buttonId }]) => {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+
+    input.addEventListener("keydown", async (e) => {
+      if (e.key !== "Enter") return;
+      // ignore Enter in multiline textareas
+      if (e.target && e.target.tagName === "TEXTAREA") return;
+
+      e.preventDefault(); // stop form submit / reload
+
+      // 1) If a direct JS function exists, call it
+      try {
+        const func = window[fn];
+        if (typeof func === "function") {
+          // If your handler expects the word as arg, pass it; otherwise call with no args
+          // Try passing input value safely
+          try {
+            await func(input.value || undefined);
+          } catch (innerErr) {
+            // fallback to calling without arguments
+            await func();
+          }
+          return;
+        }
+      } catch (err) {
+        // ignore and try fallback
+      }
+
+      // 2) If a button id is given, click it
+      if (buttonId) {
+        const btn = document.getElementById(buttonId);
+        if (btn) {
+          btn.click();
+          return;
+        }
+      }
+
+      // 3) Try to find a nearby button with onclick that references the function name and click it
+      const formButtons = document.querySelectorAll("button, input[type='button'], input[type='submit']");
+      for (const b of formButtons) {
+        const on = (b.getAttribute && b.getAttribute("onclick")) || "";
+        if (on && on.includes(fn)) {
+          b.click();
+          return;
+        }
+      }
+
+      // 4) As a last resort, attempt to call fn from window even if it's not a function (silently fail)
+      if (typeof window[fn] === "function") {
+        window[fn]();
+      } else {
+        console.warn(`Enter handler: couldn't find function ${fn} or button for input ${inputId}`);
+      }
+    });
+  });
+});
+
 
 
 </script>

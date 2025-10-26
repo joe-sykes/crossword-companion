@@ -6,8 +6,10 @@ import httpx
 from fastapi import Query
 import pandas as pd
 import os
+from dotenv import load_dotenv
 
 app = FastAPI()
+load_dotenv()
 
 # --- CORS ---
 app.add_middleware(
@@ -76,7 +78,8 @@ def anagram_with_wildcard(pattern: str):
 
     return {"pattern": pattern, "count": len(matches), "matches": matches}
 
-MW_API_KEY = "b6ae13b7-80d0-4e70-95ab-7fa5feddea27"
+MW_API_KEY = os.environ['MERRIAM_WEBSTER_API_KEY']
+
 
 @app.get("/dictionary")
 async def dictionary_lookup(word: str):
