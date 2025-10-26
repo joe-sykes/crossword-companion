@@ -1,6 +1,6 @@
 {
   "name": "Crossword Companion",
-  "short_name": "Crossword",
+  "short_name": "Crossword Companion",
   "description": "Your all-in-one crossword-solving assistant.",
   "start_url": "/",
   "display": "standalone",
