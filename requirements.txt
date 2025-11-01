@@ -22,3 +22,5 @@ typing_extensions==4.15.0
 tzdata==2025.2
 uvicorn==0.38.0
 python-dotenv
+requests
+schedule
