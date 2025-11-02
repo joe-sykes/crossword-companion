@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://crossword-companion.net/sitemap.xml
