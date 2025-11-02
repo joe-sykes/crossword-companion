@@ -1,414 +1,485 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Crossword Companion is an all-in-one tool to help you solve crosswords efficiently. Search definitions, find anagrams, explore indicator words, and track recent searches without giving away answers.">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Crossword Companion is an all-in-one tool to help you solve crosswords efficiently. Search definitions, find anagrams, explore indicator words, and track recent searches without giving away answers.">
 
-<!-- Open Graph for social sharing -->
-<meta property="og:title" content="Crossword Companion" />
-<meta property="og:description" content="All-in-one crossword-solving companion that helps you think smarter, not cheat." />
-<meta property="og:url" content="https://crossword-companion.net//" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://crossword-companion.net/favicon/ogpreview.png" />
+    <!-- Open Graph for social sharing -->
+    <meta property="og:title" content="Crossword Companion" />
+    <meta property="og:description" content="All-in-one crossword-solving companion that helps you think smarter, not cheat." />
+    <meta property="og:url" content="https://crossword-companion.net//" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://crossword-companion.net/favicon/ogpreview.png" />
 
-<!-- Canonical URL -->
-<link rel="canonical" href="https://crossword-companion.net/" />
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://crossword-companion.net/" />
 
-<title>Crossword Companion | Smart Crossword Solver Assistant</title>
+    <title>Crossword Companion | Smart Crossword Solver Assistant</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+    <!-- Fonts & Styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 
-<script src="https://cdn.tailwindcss.com"></script>
-
-<link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
-<link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
-<link rel="shortcut icon" href="/favicon/favicon.ico" />
-<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
-<link rel="manifest" href="/favicon/site.webmanifest" />
-
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
 </head>
 
-<!-- Google tag (gtag.js) -->
+<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-NT69LLZR5T"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-NT69LLZR5T');
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NT69LLZR5T');
 </script>
 
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
-<header class="bg-white dark:bg-gray-700 shadow-md p-4">
-  <div class="flex items-center">
-    <button id="info-btn" class="ml-4 text-gray-700 hover:text-gray-900 text-xl font-bold">❓</button>
-    <button onClick="window.location.reload();" class="flex-1 text-2xl font-bold text-gray-800 dark:text-gray-100 text-center">Crossword Companion</h1>
-    <button id="dark-toggle" class="px-2 py-1 border rounded">🌓</button>
-  </div>
-</header>
-
-<!-- Modal Overlay -->
-<div id="info-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-  <!-- Modal Content -->
-  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-lg w-full relative">
-    <!-- Bigger Close Button -->
-    <button id="close-modal" class="absolute top-2 right-2 text-3xl text-gray-500 hover:text-gray-700 font-bold">&times;</button>
-    <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-100">About Crossword Companion</h2>
-    <p class="text-gray-700 dark:text-gray-200">
-      Crossword Companion is an all-in-one tool designed to help you solve crosswords without giving you the answers directly.
-      You can search word definitions, find anagrams, explore indicator words, and track your recent searches to boost your solving efficiency.
-    </p>
-  </div>
-</div>
-
-
-
-<main class="flex-1 p-4 max-w-6xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-
-  <!-- Dictionary Card -->
-  <div class="tool-card bg-white rounded-lg shadow p-6">
-    <h2 class="text-xl font-bold mb-2">Dictionary</h2>
-    <input id="dict-input" class="border rounded px-3 py-2 w-full mb-4" placeholder="Search word">
-    <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 mb-4 block mx-auto" onclick="searchDictionary()">Search</button>
-    <ul id="dict-results" class="mt-2 list-disc pl-5 max-h-64 overflow-y-auto"></ul>
-    <div id="dict-info" class="mt-4"></div>
-  </div>
-
-  <!-- Anagram Solver -->
-  <div class="tool-card bg-white rounded-lg shadow p-6">
-    <h2 class="text-xl font-bold mb-2">Anagram Solver</h2>
-    <input id="anagram-input" class="border rounded px-3 py-2 w-full mb-4" placeholder="Enter letters (use ? for wildcard)">
-    <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-4 block mx-auto" onclick="solveAnagram()">Solve</button>
-    <ul id="anagram-results" class="mt-2 list-disc pl-5 max-h-64 overflow-y-auto"></ul>
-  </div>
-
-  <!-- Indicator Word Finder -->
-  <div class="tool-card bg-white rounded-lg shadow p-6">
-    <h2 class="text-xl font-bold mb-2">Indicator Word Finder</h2>
-    <input id="indicator-input" class="border rounded px-3 py-2 w-full mb-4" placeholder="Enter a word (e.g., expert)">
-    <button class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 mb-4 block mx-auto" onclick="solveIndicator()">Search</button>
-    <ul id="indicator-results" class="mt-2 list-disc pl-5 max-h-64 overflow-y-auto"></ul>
-  </div>
-
-  <!-- Recent Searches -->
-  <div class="tool-card bg-white rounded-lg shadow p-6">
-    <h2 class="text-xl font-bold mb-2">Recent Searches</h2>
-    <ul id="recent-results" class="mt-2 list-disc pl-5 max-h-64 overflow-y-auto"></ul>
-  </div>
-
-</main>
-
-<footer class="bg-white shadow-inner p-4 text-center text-gray-600">
-  © 2025 Crossword Companion&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;Made for Mills ❤️
-</footer>
-
-<script>
-// === Dark Mode ===
-const toggle = document.getElementById('dark-toggle');
-const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-// Load saved preference first
-const saved = localStorage.getItem('darkMode');
-if (saved === "true" || (!saved && prefersDark)) document.documentElement.classList.add('dark');
-
-toggle.addEventListener('click', () => {
-  document.documentElement.classList.toggle('dark');
-  localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
-});
-
-// === Helper: clickable words ===
-function makeWordsClickable(listId) {
-  const ul = document.getElementById(listId);
-  if (!ul) return;
-  ul.querySelectorAll("li").forEach(li => {
-    const text = li.textContent.trim();
-    li.innerHTML = `<span class="word-link">${text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()}</span>`;
-    li.querySelector(".word-link").addEventListener("click", () => {
-      addRecentSearch(text);
-      reSearchAll(text);
-    });
-  });
-}
-
-// === Anagram Solver ===
-async function solveAnagram(word) {
-  const input = word || document.getElementById("anagram-input").value.trim();
-  const resultsEl = document.getElementById("anagram-results");
-  if (!input) return;
-  resultsEl.innerHTML = "<li>Searching...</li>";
-
-  try {
-    let res, data, list = [];
-
-    if (input.includes("?")) {
-      res = await fetch(`https://crossword-companion.onrender.com/anagram_pattern?pattern=${encodeURIComponent(input)}`);
-      data = await res.json();
-      list = data.matches || [];
-    } else {
-      res = await fetch(`https://crossword-companion.onrender.com/anagram?letters=${encodeURIComponent(input)}`);
-      data = await res.json();
-      list = data.anagrams || [];
-    }
-
-    resultsEl.innerHTML = list.length ? list.map(w => `<li>${w}</li>`).join("") : "<li>No results</li>";
-    makeWordsClickable("anagram-results");
-    addRecentSearch(input);
-  } catch (err) {
-    console.error(err);
-    resultsEl.innerHTML = "<li>Error fetching anagrams</li>";
-  }
-}
-
-// === Dictionary ===
-async function searchDictionary(word) {
-  const input = word || document.getElementById("dict-input").value.trim();
-  const resultsEl = document.getElementById("dict-results");
-  const infoEl = document.getElementById("dict-info");
-  if (!input) return;
-
-  resultsEl.innerHTML = "<li>Searching...</li>";
-  infoEl.innerHTML = "";
-
-  try {
-    const res = await fetch(`https://crossword-companion.onrender.com/dictionary?word=${encodeURIComponent(input)}`);
-    const data = await res.json();
-
-    if (data.error) {
-      resultsEl.innerHTML = `<li>${data.error}</li>`;
-      return;
-    }
-
-    // Handle suggestions
-    if (Array.isArray(data) && data.length && typeof data[0] === "string") {
-      resultsEl.innerHTML = data.map(s => `<li>${s}</li>`).join("");
-      infoEl.innerHTML = "<em>Did you mean:</em>";
-      return;
-    }
-
-    // Add to recent searches
-    addRecentSearch(input);
-
-    // Iterate over all homonyms
-      let html = '';
-    data.forEach(hom => {
-      const wordText = hom.hwi.hw || input;
-      const pronunciation = hom.hwi.prs?.[0]?.mw || "";
-      const fl = hom.fl || "";
-
-      let sensesHtml = '';
-      hom.def?.forEach(d => {
-        d.sseq.forEach(seqGroup => {
-          seqGroup.forEach(senseArr => {
-            const sense = senseArr[1];
-            if (!sense || !sense.dt) return;
-            sense.dt.forEach(dtItem => {
-              if (dtItem[0] === 'text') {
-                sensesHtml += `<li>${mwTextToHTML(dtItem[1])}</li>`;
-              } else if (dtItem[0] === 'vis') {
-                dtItem[1].forEach(vis => {
-                  sensesHtml += `<li class="dict-example">Example: ${mwTextToHTML(vis.t)}</li>`;
-                });
-              }
-            });
-          });
-        });
-      });
-
-      html += `
-        <div class="dict-entry">
-          <h3>${wordText} ${pronunciation ? `<span style="font-size:0.9rem;">(${pronunciation})</span>` : ""}</h3>
-          <strong>${fl}</strong>
-          <ul style="margin-left:1rem; margin-top:0.5rem;">${sensesHtml}</ul>
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-700 shadow-md p-4">
+        <div class="flex items-center">
+            <button id="info-btn" class="ml-4 text-gray-700 hover:text-gray-900 text-xl font-bold">❓</button>
+            <button onclick="window.location.reload();" 
+                    class="flex-1 text-2xl font-bold text-gray-800 dark:text-gray-100 text-center">
+                Crossword Companion
+            </button>
+            <button id="dark-toggle" class="px-2 py-1 border rounded">🌓</button>
         </div>
-        <hr style="border-color:#e5e7eb; margin:1rem 0;">
-      `;
-    });
+    </header>
 
-    infoEl.innerHTML = html;
-    resultsEl.innerHTML = "";
+    <!-- Modal Overlay -->
+    <div id="info-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-lg w-full relative">
+            <button id="close-modal" class="absolute top-2 right-2 text-3xl text-gray-500 hover:text-gray-700 font-bold">&times;</button>
+            <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-100">About Crossword Companion</h2>
+            <p class="text-gray-700 dark:text-gray-200">
+                Crossword Companion is an all-in-one tool designed to help you solve crosswords without giving you the answers directly. You can search word definitions, find anagrams, explore indicator words, and track your recent searches to boost your solving efficiency.
+            </p>
+        </div>
+    </div>
 
-  } catch (err) {
-    console.error(err);
-    resultsEl.innerHTML = "<li>Word not found</li>";
-  }
-}
-// === Clean and format Merriam-Webster dictionary markup ===
-function mwTextToHTML(text) {
-  if (!text) return "";
+    <!-- Main Content -->
+    <main class="flex-1 p-4 max-w-6xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-4">
 
-  // Replace {bc} (M-W definition colon marker) with a bullet separator
-  text = text.replace(/{bc}/g, " • ");
+        <!-- Dictionary Card -->
+        <div class="tool-card bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold mb-2">Dictionary</h2>
+            <input id="dict-input" class="border rounded px-3 py-2 w-full mb-4" placeholder="Search word">
+            <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 mb-4 block mx-auto" 
+                    onclick="searchDictionary()">Search</button>
+            <ul id="dict-results" class="mt-2 list-disc pl-5 max-h-64 overflow-y-auto"></ul>
+            <div id="dict-info" class="mt-4"></div>
+        </div>
 
-  // Italics, words in italics
-  text = text.replace(/{it}([^}]*){\/it}/g, "<em>$1</em>");
-  text = text.replace(/{wi}([^}]*){\/wi}/g, "<em>$1</em>");
+        <!-- Thesaurus Card -->
+        <div class="tool-card bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold mb-2">Thesaurus</h2>
+            <input id="thes-input" class="border rounded px-3 py-2 w-full mb-4" placeholder="Search word">
+            <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mb-4 block mx-auto" 
+                    onclick="searchThesaurus()">Search</button>
+            <ul id="thes-results" class="mt-2 list-disc pl-5 max-h-64 overflow-y-auto"></ul>
+            <div id="thes-info" class="mt-4"></div>
+        </div>
 
-  // Small caps
-  text = text.replace(/{sc}([^}]*){\/sc}/g, "<strong>$1</strong>");
+        <!-- Anagram Solver -->
+        <div class="tool-card bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold mb-2">Anagram Solver</h2>
+            <input id="anagram-input" class="border rounded px-3 py-2 w-full mb-4" placeholder="Enter letters (use ? for wildcard)">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-4 block mx-auto" 
+                    onclick="solveAnagram()">Solve</button>
+            <ul id="anagram-results" class="mt-2 list-disc pl-5 max-h-64 overflow-y-auto"></ul>
+        </div>
 
-  // Dictionary links {d_link|word|display}
-  text = text.replace(/{d_link\|([^|]*)\|([^}]*)}/g, (m, word, display) =>
-    `<a href="#" class="dict-link" data-word="${word}">${display}</a>`
-  );
+        <!-- Indicator Word Finder -->
+        <div class="tool-card bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold mb-2">Indicator Word Finder</h2>
+            <input id="indicator-input" class="border rounded px-3 py-2 w-full mb-4" placeholder="Enter a word (e.g., expert)">
+            <button class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 mb-4 block mx-auto" 
+                    onclick="solveIndicator()">Search</button>
+            <ul id="indicator-results" class="mt-2 list-disc pl-5 max-h-64 overflow-y-auto"></ul>
+        </div>
 
-  // Anchor links {a_link|word}
-  text = text.replace(/{a_link\|([^}]*)}/g, (m, word) =>
-    `<a href="#" class="dict-link" data-word="${word}">${word}</a>`
-  );
+        <!-- Recent Searches -->
+        <div class="tool-card bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold mb-2">Recent Searches</h2>
+            <ul id="recent-results" class="mt-2 list-disc pl-5 max-h-64 overflow-y-auto"></ul>
+        </div>
 
-  // Synonyms / see also {sx|word|...}
-  text = text.replace(/{sx\|([^|]*)\|[^}]*}/g, (m, word) =>
-    `<a href="#" class="dict-link" data-word="${word}">${word}</a>`
-  );
+    </main>
 
-  // Clean up other internal tags
-  text = text
-    .replace(/{dx}|{\/dx}|{dx_def}[^}]*{\/dx_def}/g, "")
-    .replace(/{\/?a_link[^}]*}/g, "")
-    .replace(/{\/?d_link[^}]*}/g, "")
-    .replace(/{\/?sx[^}]*}/g, "");
+    <!-- Footer -->
+    <footer class="bg-white shadow-inner p-4 text-center text-gray-600">
+        © 2025 Crossword Companion&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;Made for Mills ❤️
+    </footer>
 
-  // Remove double spaces or leftover spaces before punctuation
-  text = text.replace(/\s+/g, " ").trim();
+    <!-- Scripts -->
+    <script>
+        // ==============================
+        // Dark Mode Toggle (Fixed)
+        // ==============================
+        const toggle = document.getElementById('dark-toggle');
+        const prefersDark = window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-  return text;
-}
+        // Load saved preference
+        const saved = localStorage.getItem('darkMode');
+        if (saved === "true" || (!saved && prefersDark)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
 
-
-// === Event delegation for in-definition links ===
-document.addEventListener("click", function (e) {
-  if (e.target.classList.contains("dict-link")) {
-    e.preventDefault();
-    const word = e.target.getAttribute("data-word");
-    if (word) {
-      searchDictionary(word); // Perform another lookup
-    }
-  }
-});
-
-
-
-// === Indicator Finder ===
-async function solveIndicator(word) {
-  const input = word || document.getElementById("indicator-input").value.trim();
-  const resultsEl = document.getElementById("indicator-results");
-  if (!input) return;
-  resultsEl.innerHTML = "<li>Searching...</li>";
-
-  try {
-    const res = await fetch(`https://crossword-companion.onrender.com/indicator?word=${encodeURIComponent(input)}`);
-    const data = await res.json();
-    const list = data.results || [];
-
-    resultsEl.innerHTML = list.length
-  ? list.map(w => `<li><span class="indicator-word">${w}</span></li>`).join("")
-  : "<li>No results</li>";
-  addRecentSearch(input);
-
-  } catch (err) {
-    console.error(err);
-    resultsEl.innerHTML = "<li>Error fetching indicator data</li>";
-  }
-}
-
-// === Recent Searches ===
-function addRecentSearch(word) {
-  if (!word) return;
-
-  let recent = JSON.parse(localStorage.getItem("recentSearches") || "[]");
-
-  // Avoid duplicates
-  if (!recent.includes(word.toLowerCase())) {
-    recent.unshift(word.toLowerCase()); // add to beginning
-    if (recent.length > 10) recent.pop(); // keep last 10
-    localStorage.setItem("recentSearches", JSON.stringify(recent));
-  }
-
-  renderRecentSearches();
-}
-
-function renderRecentSearches() {
-  const recentList = document.getElementById("recent-results");
-  if (!recentList) return;
-
-  recentList.innerHTML = "";
-
-  const recent = JSON.parse(localStorage.getItem("recentSearches") || "[]");
-
-  recent.forEach(word => {
-    const li = document.createElement("li");
-    li.innerHTML = `<span class="word-link">${word.charAt(0).toUpperCase() + word.slice(1)}</span>`;
-    li.querySelector(".word-link").addEventListener("click", () => {
-      reSearchAll(word);
-    });
-    recentList.appendChild(li);
-  });
-}
-
-// Run when page loads
-window.addEventListener("DOMContentLoaded", () => {
-  renderRecentSearches();
-});
+        // Toggle dark mode
+        toggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem(
+                'darkMode',
+                document.documentElement.classList.contains('dark')
+            );
+        });
 
 
-// === Info window ===
-const infoBtn = document.getElementById("info-btn");
-const modal = document.getElementById("info-modal");
-const closeModal = document.getElementById("close-modal");
+        // ==============================
+        // Modal Window
+        // ==============================
+        const infoBtn = document.getElementById("info-btn");
+        const modal = document.getElementById("info-modal");
+        const closeModal = document.getElementById("close-modal");
 
-// Open modal
-infoBtn.addEventListener("click", () => {
-  modal.classList.remove("hidden");
-});
+        infoBtn.addEventListener("click", () => modal.classList.remove("hidden"));
+        closeModal.addEventListener("click", () => modal.classList.add("hidden"));
+        modal.addEventListener("click", e => {
+            if (e.target === modal) modal.classList.add("hidden");
+        });
 
-// Close modal
-closeModal.addEventListener("click", () => {
-  modal.classList.add("hidden");
-});
+        // ==============================
+        // Recent Searches
+        // ==============================
+        function addRecentSearch(word) {
+            if (!word) return;
 
-// Close modal when clicking outside the content
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) {
-    modal.classList.add("hidden");
-  }
-});
+            let recent = JSON.parse(localStorage.getItem("recentSearches") || "[]");
 
+            if (!recent.includes(word.toLowerCase())) {
+                recent.unshift(word.toLowerCase());
+                if (recent.length > 10) recent.pop(); // keep last 10
+                localStorage.setItem("recentSearches", JSON.stringify(recent));
+            }
 
+            renderRecentSearches();
+        }
 
-// === Re-run all searches when clicking a recent term ===
-function reSearchAll(word) {
-  document.getElementById("dict-input").value = word;
-  document.getElementById("anagram-input").value = word;
-  document.getElementById("indicator-input").value = word;
+        function renderRecentSearches() {
+            const recentList = document.getElementById("recent-results");
+            if (!recentList) return;
 
-  searchDictionary(word);
-  solveAnagram(word);
-  solveIndicator(word);
-}
+            recentList.innerHTML = "";
+            const recent = JSON.parse(localStorage.getItem("recentSearches") || "[]");
 
-document.addEventListener("DOMContentLoaded", () => {
-  const toggle = document.getElementById('dark-toggle');
-  const saved = localStorage.getItem('darkMode');
+            recent.forEach(word => {
+                const li = document.createElement("li");
+                li.innerHTML = `<span class="word-link">${word.charAt(0).toUpperCase() + word.slice(1)}</span>`;
+                li.querySelector(".word-link").addEventListener("click", () => {
+                    reSearchAll(word);
+                });
+                recentList.appendChild(li);
+            });
+        }
 
-  if (saved === "true") document.body.classList.add('dark-mode');
-  if (saved === "false") document.body.classList.remove('dark-mode');
+        window.addEventListener("DOMContentLoaded", renderRecentSearches);
 
-  toggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-  });
-});
+        // ==============================
+        // Helper: Clickable Words
+        // ==============================
+        function makeWordsClickable(listId) {
+            const ul = document.getElementById(listId);
+            if (!ul) return;
 
+            ul.querySelectorAll("li").forEach(li => {
+                const text = li.textContent.trim();
+                li.innerHTML = `<span class="word-link">${text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()}</span>`;
+                li.querySelector(".word-link").addEventListener("click", () => {
+                    addRecentSearch(text);
+                    reSearchAll(text);
+                });
+            });
+        }
 
-document.addEventListener("DOMContentLoaded", () => {
+        // ==============================
+        // Merriam-Webster Text Formatter
+        // ==============================
+        function mwTextToHTML(text) {
+            if (!text) return "";
+
+            // Replace {bc} with bullet
+            text = text.replace(/{bc}/g, " • ");
+
+            // Italics
+            text = text.replace(/{it}([^}]*){\/it}/g, "<em>$1</em>");
+            text = text.replace(/{wi}([^}]*){\/wi}/g, "<em>$1</em>");
+
+            // Small caps
+            text = text.replace(/{sc}([^}]*){\/sc}/g, "<strong>$1</strong>");
+
+            // Dictionary links
+            text = text.replace(/{d_link\|([^|]*)\|([^}]*)}/g,
+                (_, word, display) => `<a href="#" class="dict-link" data-word="${word}">${display}</a>`
+            );
+
+            text = text.replace(/{a_link\|([^}]*)}/g,
+                (_, word) => `<a href="#" class="dict-link" data-word="${word}">${word}</a>`
+            );
+
+            text = text.replace(/{sx\|([^|]*)\|[^}]*}/g,
+                (_, word) => `<a href="#" class="dict-link" data-word="${word}">${word}</a>`
+            );
+
+            // Remove other internal tags
+            text = text.replace(/{dx}|{\/dx}|{dx_def}[^}]*{\/dx_def}/g, "")
+                      .replace(/{\/?a_link[^}]*}/g, "")
+                      .replace(/{\/?d_link[^}]*}/g, "")
+                      .replace(/{\/?sx[^}]*}/g, "");
+
+            // Clean whitespace
+            text = text.replace(/\s+/g, " ").trim();
+
+            return text;
+        }
+
+        // ==============================
+        // Event Delegation for Dict Links
+        // ==============================
+        document.addEventListener("click", function (e) {
+            if (e.target.classList.contains("dict-link")) {
+                e.preventDefault();
+                const word = e.target.getAttribute("data-word");
+                if (word) searchDictionary(word);
+            }
+        });
+
+        // ==============================
+        // Anagram Solver
+        // ==============================
+        async function solveAnagram(word) {
+            const input = word || document.getElementById("anagram-input").value.trim();
+            const resultsEl = document.getElementById("anagram-results");
+            if (!input) return;
+
+            resultsEl.innerHTML = "<li>Searching...</li>";
+
+            try {
+                let res, data, list = [];
+
+                if (input.includes("?")) {
+                    res = await fetch(`https://crossword-companion.onrender.com/anagram_pattern?pattern=${encodeURIComponent(input)}`);
+                    data = await res.json();
+                    list = data.matches || [];
+                } else {
+                    res = await fetch(`https://crossword-companion.onrender.com/anagram?letters=${encodeURIComponent(input)}`);
+                    data = await res.json();
+                    list = data.anagrams || [];
+                }
+
+                resultsEl.innerHTML = list.length
+                    ? list.map(w => `<li>${w}</li>`).join("")
+                    : "<li>No results</li>";
+
+                makeWordsClickable("anagram-results");
+                addRecentSearch(input);
+
+            } catch (err) {
+                console.error(err);
+                resultsEl.innerHTML = "<li>Error fetching anagrams</li>";
+            }
+        }
+
+        // ==============================
+        // Dictionary Lookup
+        // ==============================
+        async function searchDictionary(word) {
+            const input = word || document.getElementById("dict-input").value.trim();
+            const resultsEl = document.getElementById("dict-results");
+            const infoEl = document.getElementById("dict-info");
+            if (!input) return;
+
+            resultsEl.innerHTML = "<li>Searching...</li>";
+            infoEl.innerHTML = "";
+
+            try {
+                const res = await fetch(`https://crossword-companion.onrender.com/dictionary?word=${encodeURIComponent(input)}`);
+                const data = await res.json();
+
+                if (data.error) {
+                    resultsEl.innerHTML = `<li>${data.error}</li>`;
+                    return;
+                }
+
+                if (Array.isArray(data) && data.length && typeof data[0] === "string") {
+                    resultsEl.innerHTML = data.map(s => `<li>${s}</li>`).join("");
+                    infoEl.innerHTML = "<em>Did you mean:</em>";
+                    return;
+                }
+
+                addRecentSearch(input);
+
+                let html = "";
+                data.forEach(hom => {
+                    const wordText = hom.hwi.hw || input;
+                    const pronunciation = hom.hwi.prs?.[0]?.mw || "";
+                    const fl = hom.fl || "";
+                    let sensesHtml = "";
+
+                    hom.def?.forEach(d => {
+                        d.sseq.forEach(seqGroup => {
+                            seqGroup.forEach(senseArr => {
+                                const sense = senseArr[1];
+                                if (!sense || !sense.dt) return;
+
+                                sense.dt.forEach(dtItem => {
+                                    if (dtItem[0] === 'text') {
+                                        sensesHtml += `<li>${mwTextToHTML(dtItem[1])}</li>`;
+                                    } else if (dtItem[0] === 'vis') {
+                                        dtItem[1].forEach(vis => {
+                                            sensesHtml += `<li class="dict-example">Example: ${mwTextToHTML(vis.t)}</li>`;
+                                        });
+                                    }
+                                });
+                            });
+                        });
+                    });
+
+                    html += `
+                        <div class="dict-entry">
+                            <h3>${wordText} ${pronunciation ? `<span style="font-size:0.9rem;">(${pronunciation})</span>` : ""}</h3>
+                            <strong>${fl}</strong>
+                            <ul style="margin-left:1rem; margin-top:0.5rem;">${sensesHtml}</ul>
+                        </div>
+                        <hr style="border-color:#e5e7eb; margin:1rem 0;">
+                    `;
+                });
+
+                infoEl.innerHTML = html;
+                resultsEl.innerHTML = "";
+
+            } catch (err) {
+                console.error(err);
+                resultsEl.innerHTML = "<li>Word not found</li>";
+            }
+        }
+
+        // ==============================
+        // Thesaurus Lookup
+        // ==============================
+        async function searchThesaurus(word) {
+            const input = word || document.getElementById("thes-input").value.trim();
+            const resultsEl = document.getElementById("thes-results");
+            const infoEl = document.getElementById("thes-info");
+            if (!input) return;
+
+            resultsEl.innerHTML = "<li>Searching...</li>";
+            infoEl.innerHTML = "";
+
+            try {
+                const res = await fetch(`https://crossword-companion.onrender.com/thesaurus?word=${encodeURIComponent(input)}`);
+                const data = await res.json();
+
+                if (data.error) {
+                    resultsEl.innerHTML = `<li>${data.error}</li>`;
+                    return;
+                }
+
+                if (data.results && data.results.length > 0) {
+                    let html = "";
+                    data.results.forEach(entry => {
+                        const wordText = entry.word || input;
+                        const fl = entry.partOfSpeech || "";
+                        const shortdef = entry.shortdef?.join("; ") || "";
+                        const synonyms = entry.synonyms?.join(", ") || "";
+                        const antonyms = entry.antonyms?.join(", ") || "";
+
+                        html += `
+                            <div class="dict-entry">
+                                <h3>${wordText}</h3>
+                                <strong>${fl}</strong>
+                                <ul style="margin-left:1rem; margin-top:0.5rem;">
+                                    <li><strong>Definition:</strong> ${shortdef}</li>
+                                    ${synonyms ? `<li><strong>Synonyms:</strong> ${synonyms}</li>` : ""}
+                                    ${antonyms ? `<li><strong>Antonyms:</strong> ${antonyms}</li>` : ""}
+                                </ul>
+                            </div>
+                            <hr style="border-color:#e5e7eb; margin:1rem 0;">
+                        `;
+                    });
+                    infoEl.innerHTML = html;
+                    resultsEl.innerHTML = "";
+                    makeWordsClickable("thes-results");
+                } else {
+                    resultsEl.innerHTML = "<li>No results found</li>";
+                    infoEl.innerHTML = "";
+                }
+
+            } catch (err) {
+                console.error(err);
+                resultsEl.innerHTML = "<li>Word not found</li>";
+                infoEl.innerHTML = "";
+            }
+        }
+
+        // ==============================
+        // Indicator Finder
+        // ==============================
+        async function solveIndicator(word) {
+            const input = word || document.getElementById("indicator-input").value.trim();
+            const resultsEl = document.getElementById("indicator-results");
+            if (!input) return;
+
+            resultsEl.innerHTML = "<li>Searching...</li>";
+
+            try {
+                const res = await fetch(`https://crossword-companion.onrender.com/indicator?word=${encodeURIComponent(input)}`);
+                const data = await res.json();
+                const list = data.results || [];
+
+                resultsEl.innerHTML = list.length
+                    ? list.map(w => `<li><span class="indicator-word">${w}</span></li>`).join("")
+                    : "<li>No results</li>";
+
+                addRecentSearch(input);
+
+            } catch (err) {
+                console.error(err);
+                resultsEl.innerHTML = "<li>Error fetching indicator data</li>";
+            }
+        }
+
+        // ==============================
+        // Re-run all searches
+        // ==============================
+        function reSearchAll(word) {
+            document.getElementById("dict-input").value = word;
+            document.getElementById("thes-input").value = word;
+            document.getElementById("anagram-input").value = word;
+            document.getElementById("indicator-input").value = word;
+
+            searchDictionary(word);
+            searchThesaurus(word);
+            solveAnagram(word);
+            solveIndicator(word);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
   // Map input IDs -> handler function name or button id to click
   const bindings = {
     "dict-input": { fn: "searchDictionary", buttonId: null },
+    "thes-input": { fn: "searchThesaurus", buttonId: null },
     "anagram-input": { fn: "solveAnagram", buttonId: null },
     "pattern-input": { fn: "solvePattern", buttonId: null },
     "indicator-input": { fn: "solveIndicator", buttonId: null },
@@ -473,18 +544,19 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// === PWA: Service Worker ===
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("/service-worker.js")
-      .then((reg) => console.log("Service worker registered:", reg.scope))
-      .catch((err) => console.error("Service worker registration failed:", err));
-  });
-}
 
+        // ==============================
+        // PWA: Service Worker Registration
+        // ==============================
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("/service-worker.js")
+                    .then(reg => console.log("Service worker registered:", reg.scope))
+                    .catch(err => console.error("Service worker registration failed:", err));
+            });
+        }
 
+    </script>
 
-</script>
 </body>
 </html>
