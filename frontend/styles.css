@@ -179,9 +179,3 @@ body.dark-mode .dict-link:hover {
   display: none;
   opacity: 0;
 }
-
-.indicator-word {
-  color: inherit;
-  text-decoration: none;
-  cursor: default;
-}
