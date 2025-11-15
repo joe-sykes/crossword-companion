@@ -45,12 +45,13 @@
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
     <!-- Header -->
-    <header class="bg-white dark:bg-gray-700 shadow-md p-4">
+    <header class="bg-white dark:bg-gray-700 shadow-md p-1">
         <div class="flex items-center">
             <button id="info-btn" class="ml-4 text-gray-700 hover:text-gray-900 text-xl font-bold">❓</button>
-            <button onclick="window.location.reload();" 
-                    class="flex-1 text-2xl font-bold text-gray-800 dark:text-gray-100 text-center">
-                Crossword Companion
+            <button onclick="window.location.reload();" class="flex-1 flex justify-center">
+                <img src="banner.png" 
+                    alt="Crossword Companion" 
+                    class="h-12 md:h-16 object-contain" />
             </button>
             <button id="dark-toggle" class="px-2 py-1 border rounded">🌓</button>
         </div>

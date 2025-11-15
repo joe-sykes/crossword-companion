@@ -15,6 +15,12 @@ h1, h2 {
   font-family: 'Lexend Deca', sans-serif;
 }
 
+/* Banner Image */
+header img {
+  image-rendering: -webkit-optimize-contrast;
+}
+
+
 /* Word links */
 .word-link {
   text-decoration: underline;
